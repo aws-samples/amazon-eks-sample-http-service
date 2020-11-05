@@ -1,0 +1,98 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: aws-alb-demo-frontend
+  name: aws-alb-demo-frontend
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: aws-lb-demo-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: aws-alb-demo-backend
+  name: aws-alb-demo-backend
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: aws-lb-demo-backend
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: aws-alb-ip-demo-frontend
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "aws-alb-ip.demo.otterley.org"
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: ip
+spec:
+  backend:
+    serviceName: aws-alb-demo-frontend
+    servicePort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: aws-alb-ip-demo-backend
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: ip
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /backend/*
+            backend:
+              serviceName: aws-alb-demo-backend
+              servicePort: 80
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: aws-alb-instance-demo-frontend
+#  annotations:
+#    external-dns.alpha.kubernetes.io/hostname: "aws-alb-instance.demo.otterley.org"
+#    kubernetes.io/ingress.class: alb
+#    alb.ingress.kubernetes.io/target-type: instance
+#    alb.ingress.kubernetes.io/scheme: internet-facing
+#    alb.ingress.kubernetes.io/group.name: instance
+#spec:
+#  backend:
+#    serviceName: aws-alb-demo-frontend
+#    servicePort: 80
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: aws-alb-instance-demo-backend
+#  annotations:
+#    kubernetes.io/ingress.class: alb
+#    alb.ingress.kubernetes.io/target-type: instance
+#    alb.ingress.kubernetes.io/scheme: internet-facing
+#    alb.ingress.kubernetes.io/group.name: instance
+#spec:
+#  rules:
+#    - http:
+#        paths:
+#          - path: /backend/*
+#            backend:
+#              serviceName: aws-alb-demo-backend
+#              servicePort: 80

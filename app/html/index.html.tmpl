@@ -1,0 +1,39 @@
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <title>
+        Sample EKS application
+    </title>
+    <style>
+        .page {
+            background-color: rgb(35, 47, 62);
+        }
+        img.logo {
+            max-width: 7.5%;
+            height: auto;
+        }
+        .align-center {
+            text-align: center;
+        }
+        span.bold {
+            font-weight: bold;
+        }
+        p {
+            color: white;
+            font-family: AmazonEmber,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+    </style>
+    <body class="page">
+        <div class="align-center"><img class="logo" src="/Arch_Amazon-Elastic-Container-Kubernetes_64@5x.png"></div>
+        <p class="align-center">App label: <span class="bold">{{.AppLabel}}</span></p>
+        <p class="align-center">Requested URI: <span class="bold">{{.URL.Path}}</span></p>
+        <p class="align-center">This application is being run on instance ID <span class="bold">{{.Identity.InstanceID}}</span>
+          in Availability Zone <span class="bold">{{.Identity.AvailabilityZone}}</span>.</p>
+        <p class="align-center">Pod: <span class="bold">{{.PodName}}</span> in namespace <span class="bold">{{.PodNamespace}}</span>.</p>
+        <p class="align-center">Your client IP address appears to be <span class="bold">{{.RemoteAddr}} ({{.RemoteType}})</span>{{if ne .RemoteAddr .PeerAddr}} (via {{.PeerAddr}} ({{.PeerType}})){{end}}
+          (PROXY protocol is <span class="bold">{{if .ProxyProtocolEnabled}}enabled{{else}}disabled{{end}}</span>).</p>
+    </body>
+</head>
