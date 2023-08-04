@@ -1,4 +1,4 @@
-FROM golang:1.15.4 as build
+FROM public.ecr.aws/docker/library/golang:1.20.7 AS build
 
 ENV GOPROXY=direct CGO_ENABLED=0
 
